@@ -50,6 +50,6 @@ object BostonCrimesMap {
         select t1.DISTRICT, t1.crimes_total, t2.crimes_monthly, t3.frequent_crime_types, t1.lat, t1.lng from crime_base t1
          join crimes_monthly t2 on t1.DISTRICT = t2.DISTRICT
          join frequent_crime_types t3 on t1.DISTRICT = t3.DISTRICT
-        """).repartition(1).write.parquet(pathToOutFolder + "/" + "BostonCrimesMap")
+        """).repartition(1).write.parquet(pathToOutFolder)
       }
 }
