@@ -19,6 +19,11 @@ object JsonReader {
     }
     val pathToWineMag = args(0)
 
+    val JsonToWineMagF = (str: String) =>
+    {
+      implicit val formats = DefaultFormats
+      JsonMethods.parse(str).extract[WineMag]
+    }
 
     val spark: SparkSession = SparkSession.builder()
       .master("local[*]")
@@ -26,13 +31,8 @@ object JsonReader {
       .getOrCreate()
     import spark.implicits._
     val JsonRDD :RDD[String] = spark.sparkContext.textFile(pathToWineMag)
-    val jsonRDDCase: RDD[WineMag] = JsonRDD.map(x => JsonToWineMag(x))
+    val jsonRDDCase: RDD[WineMag] = JsonRDD.map(x => JsonToWineMagF(x))
     jsonRDDCase.collect().foreach(println)
 
-  }
-  def JsonToWineMag(str: String) :WineMag =
-  {
-    implicit val formats = DefaultFormats
-    JsonMethods.parse(str).extract[WineMag]
   }
 }
