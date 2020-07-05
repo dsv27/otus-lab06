@@ -26,14 +26,13 @@ object JsonReader {
       .getOrCreate()
     import spark.implicits._
     val JsonRDD :RDD[String] = spark.sparkContext.textFile(pathToWineMag)
-
-    JsonRDD.map(x => JsonToWineMag(x)).collect()//.foreach(println)
+    val jsonRDDCase: RDD[WineMag] = JsonRDD.map(x => JsonToWineMag(x))
+    jsonRDDCase.collect().foreach(println)
 
   }
-  def JsonToWineMag(str: String)
+  def JsonToWineMag(str: String) :WineMag =
   {
-    implicit val formats = DefaultFormats//jackson.Serialization.formats(NoTypeHints).skippingEmptyValues
-    println(JsonMethods.parse(str).extract[WineMag])
-    //JsonMethods.parse(str).extract[WineMag]
+    implicit val formats = DefaultFormats
+    JsonMethods.parse(str).extract[WineMag]
   }
 }
